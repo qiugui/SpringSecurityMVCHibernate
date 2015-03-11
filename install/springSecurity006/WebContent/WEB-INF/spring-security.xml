@@ -1,0 +1,31 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+    <http pattern="/app/user-login" security="none" />
+    <http auto-config="true">	
+		<intercept-url pattern="/app/sec/moderation" access="ROLE_USER" />
+		<intercept-url pattern="/app/admin/*" access="ROLE_ADMIN" />
+		
+		<form-login login-page="/app/user-login" 
+		default-target-url="/app/success-login" 
+		authentication-failure-url="/app/error-login" />
+		    
+	    <logout logout-success-url="/app/index" />	 
+	</http>
+	
+	<beans:bean id="customUserDetailsService"	class="com.yihaomen.service.CustomUserDetailsService" />
+	
+	
+	<authentication-manager>
+		<authentication-provider user-service-ref="customUserDetailsService">
+			<password-encoder hash="plaintext">
+		</password-encoder></authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
