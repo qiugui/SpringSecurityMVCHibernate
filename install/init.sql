@@ -28,7 +28,7 @@ Create TABLE `users` (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-Insert INTO `users` VALUES ('1', '邱桂', '123456');
+Insert INTO `users` VALUES ('1', 'qiugui', '123456');
 Insert INTO `users` VALUES ('2', 'admin', '123456');
 
 -- ----------------------------

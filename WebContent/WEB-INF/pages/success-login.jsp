@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<!-- <meta http-equiv="Refresh" content="0;URL=app/home.jsp"> -->
-<title>Index</title>
+<title>Welcome page</title>
 </head>
 <body>
-	<jsp:forward page="/WEB-INF/pages/home.jsp" />
+<h1>Welcome page</h1>
+<p>You have successfully logged in.<br/>
+<a href="${pageContext.request.contextPath}/app/index">Home page</a><br/></p>
 </body>
 </html>

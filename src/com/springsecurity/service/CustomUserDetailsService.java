@@ -23,37 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 	 @Resource(name="userServiceImpl")
 	 private UserService userService;
 	 
-	private List<String> getRoles(Integer role) {
-		List<String> roles = new ArrayList<String>();
-		if(role.intValue() ==1){
-			roles.add("ROLE_USER");
-			roles.add("ROLE_ADMIN");
-		} else if (role.intValue() == 2){
-			roles.add("ROLE_USER");
-		}
-		 return roles;	 
-	}
-
-	private List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {
-		 //这是授权
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		
-		for (String role : roles) {
-			authorities.add(new SimpleGrantedAuthority(role));
-		}
-		
-		return authorities;
-		 
-	}
-	
-	@SuppressWarnings("unused")
-	private Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
-		
-		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
-		 return null;
-		 
-	}
-	 
 	@Override
 	public UserDetails loadUserByUsername(String login)
 			throws UsernameNotFoundException {
@@ -74,6 +43,44 @@ import org.springframework.transaction.annotation.Transactional;
 				 accountNonLocked,
 				 getAuthorities(domainUser.getRole().getId())
 			);
+		 
+	}
+	 
+	
+	private Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
+		
+		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
+		 return authList;
+		 
+	}
+	
+	/**   
+	 * @Title: getRoles   
+	 * @Description: 角色的获取  
+	 * @param role
+	 * @return        
+	 */
+	 
+	private List<String> getRoles(Integer role) {
+		List<String> roles = new ArrayList<String>();
+		if(role.intValue() ==1){
+			roles.add("ROLE_USER");
+			roles.add("ROLE_ADMIN");
+		} else if (role.intValue() == 2){
+			roles.add("ROLE_USER");
+		}
+		 return roles;	 
+	}
+
+	private List<GrantedAuthority> getGrantedAuthorities(List<String> roles) {
+		 //这是授权
+		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		
+		for (String role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		
+		return authorities;
 		 
 	}
 }

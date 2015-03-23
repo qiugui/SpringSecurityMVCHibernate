@@ -5,76 +5,23 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
-
-	<!-- 未配置403界面，且不同用户只能跳转同一界面 -->
-	<!-- <http auto-config="true">
-		<intercept-url pattern="/app/welcome*" access="ROLE_USER"/>
-		<intercept-url pattern="/app/admin*" access="ROLE_ADMIN"/>
-		default-target-url登陆后默认跳转页面
-		<form-login login-page="/app/login" default-target-url="/app/admin" 
-		authentication-failure-url="/app/loginfailed" />
-		<logout logout-success-url="/app/logout" />
-	</http> -->
 	
-	<!-- 不同用户跳转到不同页面 -->
-	<!-- 第一种方法，可以用 default-target-url 作为一个controller 来跳转.比较简单 -->
-    <!-- <http auto-config="true">
-        <intercept-url pattern="/app/welcome*" access="ROLE_USER" />
-        <intercept-url pattern="/app/admin*" access="ROLE_ADMIN" />
-        <access-denied-handler ref="accessDeniedHandler"/>
-        <form-login login-page="/app/login" default-target-url="/app/dispatch"
-            authentication-failure-url="/app/loginfailed" />
-        <logout logout-success-url="/app/logout" />
-    </http> -->
-    <!-- 第一种方法结束 -->
-    
-    <!-- 第二种方法，用自己写的AuthenticationSuccessHandler处理，配置在
-    	 spring-mvc.xml中的bean-->
-   	 <http auto-config="true">
-   	 	<intercept-url pattern="/app/welcome*" access="ROLE_USER" />
-       	<intercept-url pattern="/app/admin*" access="ROLE_ADMIN" />
-       	<access-denied-handler ref="accessDeniedHandler"/>
-       	<form-login authentication-success-handler-ref="mySuccessHandler"/>
-       	<logout logout-success-url="/app/logout"/>
-   	 </http>
-	
-	<!-- 配置403界面 -->
-	<!-- 方法一， 配置 access-denied-handler 方式实现  -->
-	<!-- <http pattern="/app/403" security="none"/>
+	<http pattern="/app/user-login" security="none"/>
 	<http auto-config="true">
-		<intercept-url pattern="/app/admin*" access="ROLE_ADMIN"/>
-		<access-denied-handler error-page="/app/403"/>
-		<form-login login-page="/app/login" default-target-url="/app/admin"
-		authentication-failure-url="/app/loginfailed"/>
-		<logout logout-success-url="/app/logout"/>
-	</http> -->
+		<intercept-url pattern="/app/sec/moderation" access="ROLE_USER"/>
+		<intercept-url pattern="/app/admin/*" access="ROLE_ADMIN"/>
+		<form-login login-page="/app/user-login" 
+		default-target-url="/app/success-login" 
+		authentication-failure-url="/app/error-login"/>
+		<logout logout-success-url="/app/index"/>
+	</http>
 	
-	<!-- 方法二, 实现 spring 的 AccessDeniedHandler, 重写 handle() 方法  -->
-	<!-- <http auto-config="true">
-		<intercept-url pattern="/app/admin*" access="ROLE_ADMIN"/>
-		<access-denied-handler ref="accessDeniedHandler"/>
-		<form-login login-page="/app/login" default-target-url="/app/admin"
-		authentication-failure-url="/app/loginfailed"/>
-		<logout logout-success-url="/app/logout"/>
-	</http> -->
+	<beans:bean id="customUserDetailsService" 
+	class="com.springsecurity.service.CustomUserDetailsService" />
 	
-	<!-- XML配置用户名和密码 -->
-<!-- 	<authentication-manager>
-		<authentication-provider>
-			<user-service>
-				<user name="qiugui" password="123456" authorities="ROLE_USER"/>
-			</user-service>
-		</authentication-provider>
-	</authentication-manager> -->
-	
-	<!-- 数据库认证 -->
 	<authentication-manager>
-		<authentication-provider>
-			<jdbc-user-service data-source-ref="dataSource"
-			users-by-username-query="select username,password,enabled from users where username = ?"
-			authorities-by-username-query="select u.username,ur.authority from users u,user_roles ur 
-			where u.user_id = ur.user_id and u.username=?"/>
+		<authentication-provider user-service-ref="customUserDetailsService">
+			<password-encoder hash="plaintext"></password-encoder>
 		</authentication-provider>
 	</authentication-manager>
-		
 </beans:beans>
