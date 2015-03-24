@@ -16,7 +16,7 @@
  -->
 	<!-- 启用注解扫描 -->
 	<context:component-scan
-		base-package="com.springsecurity.controller,com.springsecurity.dao,com.springsecurity.service" />
+		base-package="com.springsecurity.dao,com.springsecurity.service" />
 
 	<!-- 配置数据源 -->
 	<context:property-placeholder location="classpath:/resources/c3p0.properties"/>

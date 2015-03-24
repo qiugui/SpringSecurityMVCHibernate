@@ -21,7 +21,7 @@ import com.springsecurity.model.User;
 
 		Session session = sessionFactory.getCurrentSession();
 		
-		String hql = "from User u where u.login :=login";
+		String hql = "from User u where u.login =:login";
 		
 		Query query  = session.createQuery(hql);
 		query.setParameter("login", login);
